@@ -1,5 +1,4 @@
 import { asyncRoutes, constantRoutes } from '@/router'
-import store from '..'
 
 /**
  * Use meta.role to determine if the current user has permission
