@@ -1,4 +1,5 @@
 import { asyncRoutes, constantRoutes } from '@/router'
+import store from '..'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -39,6 +40,7 @@ const state = {
   addRoutes: []
 }
 
+// vuex mutations内定义的方法, 通过commit方法赋值
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
@@ -46,14 +48,16 @@ const mutations = {
   }
 }
 
+// vuex actions内定义的方法
+// 通过 store.dispatch 赋值   await store.dispatch('permission/generateRoutes', roles)
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
-      if (roles.includes('admin')) {
+      let accessedRoutes // 定义一个可访问的 动态路由 对象
+      if (roles.includes('admin')) { // 如果角色是admin, 拥有所有的动态路由
         accessedRoutes = asyncRoutes || []
       } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles) // 不是admin,需要过滤出可用路由,主要是未来生成左侧sidebar
       }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
