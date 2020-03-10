@@ -4,7 +4,7 @@ export function login(data) {
   return request({
     url: '/vue-element-admin/user/login',
     method: 'post',
-    data
+    data // data: data 可用简写成 data
   })
 }
 

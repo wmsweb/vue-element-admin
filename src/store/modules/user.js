@@ -35,9 +35,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+        commit('SET_TOKEN', data.token) // 把token保存到store中
+        setToken(data.token) // 把token保存到cookies中
+        resolve() // 通知回调函数then()
       }).catch(error => {
         reject(error)
       })
