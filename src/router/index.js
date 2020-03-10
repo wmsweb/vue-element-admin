@@ -55,6 +55,20 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
 
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/create',
+    children: [
+      {
+        path: '/user/create',
+        component: () => import('@/views/user/create'),
+        name: 'user',
+        meta: { title: '添加用户', icon: 'edit', roles: ['admin'] }
+      }
+    ]
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 
