@@ -16,8 +16,9 @@ service.interceptors.request.use(
     // 请求之前拦截器
 
     if (store.getters.token) { // 从store中取出token放到header中
-      // ['X-Token'] is a custom headers key
-      config.headers['X-Token'] = getToken()
+      // ['Authorization'] is a custom headers key
+      // config.headers['Authorization'] = getToken()
+      config.headers['Authorization'] = `Bearer ${getToken()}`
     }
     return config
   },
@@ -34,9 +35,9 @@ service.interceptors.response.use(
     const res = response.data
 
     // 20000 请求正常成功
-    if (res.code !== 20000) { // 请求不成功
+    if (res.code !== 0) { // 请求不成功
       Message({
-        message: res.message || 'Error',
+        message: res.message || '请求失败',
         type: 'error',
         duration: 5 * 1000
       })
@@ -56,7 +57,7 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.message || '请求失败'))
     } else {
       return res
     }
