@@ -17,8 +17,8 @@ service.interceptors.request.use(
 
     if (store.getters.token) { // 从store中取出token放到header中
       // ['Authorization'] is a custom headers key
-      // config.headers['Authorization'] = getToken()
-      config.headers['Authorization'] = `Bearer ${getToken()}`
+      config.headers['Authorization'] = getToken()
+      // config.headers['Authorization'] = `Bearer ${getToken()}`
     }
     return config
   },
