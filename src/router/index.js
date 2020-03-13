@@ -56,31 +56,31 @@ export const constantRoutes = [
 export const asyncRoutes = [
 
   {
-    path: '/user',
+    path: '/book',
     component: Layout,
-    redirect: '/user/create',
-    name: 'user',
-    meta: { title: '用户管理', icon: 'user', roles: ['admin'] },
+    redirect: '/book/create',
+    name: 'book',
+    meta: { title: '图书管理', icon: 'documentation', roles: ['admin'] },
     children: [
       {
-        path: '/user/list',
-        name: 'userList',
-        component: () => import('@/views/user/List'),
-        meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
+        path: '/book/list',
+        name: 'bookList',
+        component: () => import('@/views/book/List'),
+        meta: { title: '图书列表', icon: 'list', roles: ['admin'] }
       },
       {
-        path: '/user/create',
-        name: 'userCreate',
-        component: () => import('@/views/user/Create'),
-        meta: { title: '添加用户', icon: 'edit', roles: ['admin'] }
+        path: '/book/create',
+        name: 'bookCreate',
+        component: () => import('@/views/book/Create'),
+        meta: { title: '添加图书', icon: 'edit', roles: ['admin'] }
       },
       {
-        path: '/user/edit',
-        name: 'userEdit',
+        path: '/book/edit',
+        name: 'bookEdit',
         hidden: true,
-        component: () => import('@/views/user/Edit'),
+        component: () => import('@/views/book/Edit'),
         // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-        meta: { title: '编辑用户', icon: 'edit', roles: ['admin'], activeMenu: '/user/list' } // icon : [edit, menu, document, location, setting, list]
+        meta: { title: '编辑图书', icon: 'edit', roles: ['admin'], activeMenu: '/book/list' } // icon : [edit, menu, documentation, location, setting, list]
       }
     ]
   },

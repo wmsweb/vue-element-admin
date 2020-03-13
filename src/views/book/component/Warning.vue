@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .detail-container {
   padding: 40px 50px
 }
