@@ -1,9 +1,13 @@
 <template>
-  <div>创建用户</div>
+  <div>isEdit:{{ isEdit }}</div>
 </template>
 
 <script>
 export default {
+
+  props: {
+    isEdit: Boolean
+  }
 
 }
 </script>

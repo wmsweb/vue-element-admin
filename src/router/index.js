@@ -63,16 +63,24 @@ export const asyncRoutes = [
     meta: { title: '用户管理', icon: 'user', roles: ['admin'] },
     children: [
       {
-        path: '/user/create',
-        name: 'userCreate',
-        component: () => import('@/views/user/create'),
-        meta: { title: '添加用户', icon: 'edit', roles: ['admin'] } // icon : [edit, menu, document, location, setting]
+        path: '/user/list',
+        name: 'userList',
+        component: () => import('@/views/user/List'),
+        meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
       },
       {
         path: '/user/create',
         name: 'userCreate',
-        component: () => import('@/views/user/create'),
-        meta: { title: '添加用户', icon: 'edit', roles: ['admin'] } // icon : [edit, menu, document, location, setting]
+        component: () => import('@/views/user/Create'),
+        meta: { title: '添加用户', icon: 'edit', roles: ['admin'] }
+      },
+      {
+        path: '/user/edit',
+        name: 'userEdit',
+        hidden: true,
+        component: () => import('@/views/user/Edit'),
+        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+        meta: { title: '编辑用户', icon: 'edit', roles: ['admin'], activeMenu: '/user/list' } // icon : [edit, menu, document, location, setting, list]
       }
     ]
   },
