@@ -106,7 +106,7 @@ import Sticky from '../../../components/Sticky/index'
 import Warning from './Warning'
 import EbookUpload from '@/components/EbookUpload'
 import MdInput from '@/components/MDinput'
-import { createBook } from '@/api/book'
+import { createBook, getBook, updateBook } from '@/api/book'
 
 const fields = {
   title: '标题',
@@ -153,9 +153,22 @@ export default {
       }
     }
   },
+  created() { // vue 生命周期函数
+    if (this.isEdit) {
+      console.log(this.$route.params) // 当前动态路由
+      const fileName = this.$route.params.fileName
+      this.getBookData(fileName)
+    }
+  },
   methods: {
+    getBookData(fileName) {
+      getBook(fileName).then(response => {
+        this.setData(response.data)
+      })
+    },
     submitForm() {
       if (!this.loading) {
+        this.loading = true
         this.$refs.postForm.validate((valid, fields) => { // 提交之前的校验
           if (valid) { // 通过验证
             console.log(this.postForm)
@@ -183,7 +196,18 @@ export default {
                 this.loading = false
               })
             } else {
-              // updateBook(book)
+              updateBook(book).then(response => {
+                const { message } = response
+                this.$notify({
+                  title: '操作成功',
+                  message: message,
+                  type: 'success',
+                  duration: 2000
+                })
+                this.loading = false
+              }).catch(() => {
+                this.loading = false
+              })
             }
           } else {
             const validErrMsg = fields[Object.keys(fields)[0]][0].message
@@ -233,6 +257,7 @@ export default {
         unzipPath
       }
       this.capterTree = capterTree
+      this.fileList = [{ name: fileName, url: url }]
       console.log('========', capterTree)
     },
     showGuide() {

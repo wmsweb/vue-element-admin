@@ -10,9 +10,17 @@ export function createBook(book) {
 
 export function updateBook(book) {
   return request({
-    url: '/file/update',
+    url: '/file/submitPostForm',
     method: 'post',
     data: book
+  })
+}
+
+export function getBook(fileName) {
+  return request({
+    url: '/file/getBook',
+    method: 'get',
+    params: { fileName } // get方法使用params post方法使用data
   })
 }
 
