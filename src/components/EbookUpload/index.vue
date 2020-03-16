@@ -60,13 +60,13 @@ export default {
       this.$emit('beforeUpload', file) // 提交给父组件监听方法
     },
     onSuccess(response, file) {
-      const { code, message } = response
-      if (code === 0) {
+      const { code, message, data } = response
+      if (code === 200) {
         this.$message({
           message: message,
           type: 'success'
         })
-        this.$emit('onSuccess', file)
+        this.$emit('onSuccess', data)
       } else {
         this.$message({
           message: (message && `上传失败,失败原因:${message}`) || '上传失败',

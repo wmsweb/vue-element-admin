@@ -35,7 +35,7 @@ service.interceptors.response.use(
     const res = response.data
 
     // 20000 请求正常成功
-    if (res.code !== 0) { // 请求不成功
+    if (res.code !== 200) { // 请求不成功
       Message({
         message: res.message || '请求失败',
         type: 'error',
@@ -45,7 +45,7 @@ service.interceptors.response.use(
       // 50008: Illegal token;
       // 50012: Other clients logged in;
       // 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.code === 401) {
         // to re-login
         MessageBox.confirm('Token 已失效, 是否重新登录', '确认登出', {
           confirmButtonText: '重新登录',
