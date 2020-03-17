@@ -24,3 +24,23 @@ export function getBook(fileName) {
   })
 }
 
+export function getCategory() {
+  return request({
+    url: '/file/getCategory',
+    method: 'get'
+  })
+}
+export function getTableList(params) {
+  return request({
+    url: '/file/getTableList',
+    method: 'get',
+    params
+  })
+}
+export function deleteBook(id) {
+  return request({
+    url: '/file/deleteBook',
+    method: 'get',
+    params: { id }
+  })
+}
