@@ -173,7 +173,7 @@ export default {
         query.sort && (sort = query.sort)
       }
       const sortSymbol = sort[0]
-      const sortColumn = sort.silce(1, sort.length)
+      const sortColumn = sort.slice(1, sort.length)
       this.defaultSort = {
         prop: sortColumn,
         order: sortSymbol === '+' ? 'ascending' : 'descending'
