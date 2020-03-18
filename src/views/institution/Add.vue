@@ -71,8 +71,12 @@
           <el-row>
             <el-col :span="8">
               <el-form-item>
-                <el-button type="primary" @click="submitForm('numberForm')">立即创建</el-button>
-                <el-button @click="resetForm('numberForm')">重置</el-button>
+                <el-button v-waves type="primary" icon="el-icon-check" :loading="loading" @click="submitForm('numberForm')">
+                  立即创建
+                </el-button>
+                <el-button v-waves icon="el-icon-remove" @click="resetForm('numberForm')">
+                  重置
+                </el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -85,6 +89,8 @@
 
 <script>
 import Sticky from '@/components/Sticky/index'
+import { addInstitution } from '@/api/institution'
+import waves from '@/directive/waves/waves' // 指令,在按钮上点击有水波效果
 
 export default {
 
@@ -92,10 +98,12 @@ export default {
   components: {
     Sticky
   },
-
+  directives: {
+    waves
+  },
   data() {
     return {
-
+      loading: false,
       numberForm: {},
       rules: {
         name: [
@@ -127,14 +135,27 @@ export default {
   },
   methods: {
     submitForm(formName) { // 提交
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      if (!this.loading) {
+        this.loading = true
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            addInstitution(this.numberForm).then(result => {
+              const { message } = result
+              this.$notify({
+                title: '操作成功',
+                message: message || '添加机构成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.loading = false
+            }).catch(() => {
+              this.loading = false
+            })
+          } else {
+            this.loading = false
+          }
+        })
+      }
     },
     resetForm(formName) { // 重置
       this.$refs[formName].resetFields()

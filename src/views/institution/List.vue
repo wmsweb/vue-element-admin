@@ -222,8 +222,8 @@ export default {
         console.log(this.multipleSelection)
       })
     },
-    handleEdit() { // 编辑
-
+    handleEdit(row) { // 编辑
+      this.$router.push(`/institution/edit/${row.id}`)
     },
     handleDelete(row) { // 删除
       this.$confirm('此操作将删除机构,是否继续', '提示', {

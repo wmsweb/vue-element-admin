@@ -114,7 +114,66 @@ export const asyncRoutes = [
       }
     ]
   },
-
+  // 用户管理
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/list',
+    name: 'user',
+    meta: { title: '用户管理', icon: 'peoples', roles: ['admin'] },
+    children: [
+      {
+        path: '/user/list',
+        name: 'userList',
+        component: () => import('@/views/user/List'),
+        meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
+      },
+      {
+        path: '/user/add',
+        name: 'addUser',
+        component: () => import('@/views/user/Add'),
+        meta: { title: '添加用户', icon: 'user', roles: ['admin'] }
+      },
+      {
+        path: '/user/edit/:userId',
+        name: 'editUser',
+        hidden: true,
+        component: () => import('@/views/user/Edit'),
+        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+        meta: { title: '编辑用户', icon: 'edit', roles: ['admin'], activeMenu: '/user/list' } // icon : [edit, menu, documentation, location, setting, list]
+      }
+    ]
+  },
+   // 授权管理
+  {
+    path: '/authorization',
+    component: Layout,
+    redirect: '/authorization/list',
+    name: 'authorization',
+    meta: { title: '授权管理', icon: 'tree-table', roles: ['admin'] },
+    children: [
+      {
+        path: '/authorization/list',
+        name: 'authorizationList',
+        component: () => import('@/views/authorization/List'),
+        meta: { title: '授权列表', icon: 'list', roles: ['admin'] }
+      },
+      {
+        path: '/authorization/add',
+        name: 'addAuthorization',
+        component: () => import('@/views/authorization/Add'),
+        meta: { title: '添加授权', icon: 'table', roles: ['admin'] }
+      },
+      {
+        path: '/authorization/edit/:authorizationId',
+        name: 'editAuthorization',
+        hidden: true,
+        component: () => import('@/views/authorization/Edit'),
+        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+        meta: { title: '编辑授权', icon: 'edit', roles: ['admin'], activeMenu: '/authorization/list' } // icon : [edit, menu, documentation, location, setting, list]
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
