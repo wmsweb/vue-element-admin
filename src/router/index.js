@@ -97,6 +97,20 @@ export const asyncRoutes = [
         name: 'institutionList',
         component: () => import('@/views/institution/List'),
         meta: { title: '机构列表', icon: 'list', roles: ['admin'] }
+      },
+      {
+        path: '/institution/add',
+        name: 'addInstitution',
+        component: () => import('@/views/institution/Add'),
+        meta: { title: '添加机构', icon: 'edit', roles: ['admin'] }
+      },
+      {
+        path: '/institution/edit/:institutionId',
+        name: 'editInstitution',
+        hidden: true,
+        component: () => import('@/views/institution/Edit'),
+        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+        meta: { title: '编辑机构', icon: 'edit', roles: ['admin'], activeMenu: '/institution/list' } // icon : [edit, menu, documentation, location, setting, list]
       }
     ]
   },

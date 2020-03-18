@@ -210,20 +210,38 @@ export default {
       this.listQuery = {}
       this.parseQuery()
     },
-    handleAdd() { // 设置提醒
-      // TODO
+    handleAdd() { // 添加
+      this.$router.push('/institution/add')
     },
-    handleSync() { // 查看明细
-      // TODO
+    handleSync() { // 同步
+      this.$confirm('是否重新同步授权信息到业务系统？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(this.multipleSelection)
+      })
     },
     handleEdit() { // 编辑
 
     },
-    handleDelete() { // 删除
-
+    handleDelete(row) { // 删除
+      this.$confirm('此操作将删除机构,是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row.id)
+      })
     },
-    handleStop() { // 停用
-
+    handleStop(row) { // 停用
+      this.$confirm('此操作将停用机构,是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row.id)
+      })
     },
     handleSelectionChange(val) { // 表单选中
       this.multipleSelection = val
