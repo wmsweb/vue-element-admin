@@ -84,6 +84,22 @@ export const asyncRoutes = [
       }
     ]
   },
+  // 机构管理
+  {
+    path: '/institution',
+    component: Layout,
+    redirect: '/institution/list',
+    name: 'institution',
+    meta: { title: '机构管理', icon: 'tree', roles: ['admin'] },
+    children: [
+      {
+        path: '/institution/list',
+        name: 'institutionList',
+        component: () => import('@/views/institution/List'),
+        meta: { title: '机构列表', icon: 'list', roles: ['admin'] }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
