@@ -51,31 +51,31 @@
       fit
       stripe
       highlight-current-row
-      style="width: 880px"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column label="ID" prop="id" align="center" width="100" />
-      <el-table-column label="用户名称" prop="username" align="center" width="150">
+      <el-table-column type="selection" />
+      <el-table-column label="ID" prop="id" align="center" />
+      <el-table-column label="用户名称" prop="username" align="center">
         <template slot-scope="{row:{username}}"><span>{{ username }}</span></template>
       </el-table-column>
-      <el-table-column label="用户角色" prop="roleName" align="center" width="150">
+      <el-table-column label="用户角色" prop="roleName" align="center">
         <template slot-scope="{row:{roleName}}"><span>{{ roleName }}</span></template>
       </el-table-column>
-      <el-table-column label="操作时间" prop="updateTime" width="200" align="center">
+      <el-table-column label="操作时间" prop="updateTime" align="center">
         <template slot-scope="{row:{updateTime}}"><span>{{ updateTime | timeFilter }}</span></template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="200" fixed="right">
+      <el-table-column label="操作" align="center" fixed="right">
         <template slot-scope="{row}">
           <el-button
             size="mini"
             type="primary"
             icon="el-icon-edit"
             :autofocus="true"
-            @click="handleEdit(row)"
+            @click="handleUpdate(row)"
           >编辑</el-button>
           <el-button
+            style="margin-left: 30px;"
             size="mini"
             icon="el-icon-delete"
             type="danger"
@@ -96,33 +96,18 @@
       @pagination="handleFilter"
     />
 
-    <el-dialog title="添加用户" :visible.sync="dialogFormVisibleAdd">
-      <el-form
-        ref="userForm"
-        :model="userForm"
-        :rules="rules"
-        :hide-required-asterisk="false"
-        label-position="left"
-        label-width="100px"
-      >
-        <el-form-item label="用户名: " style="width: 400px" prop="username">
-          <el-input v-model="userForm.username" autocomplete="off" clearable maxlength="25" />
-        </el-form-item>
-        <el-form-item label="密码: " style="width: 400px" prop="password">
-          <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" />
-        </el-form-item>
-        <el-form-item label="角色: " prop="role">
-          <el-select v-model="userForm.role" placeholder="请选择角色">
-            <el-option label="管理权限" value="admin" />
-            <el-option label="查看权限" value="view" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisibleAdd = false">取 消</el-button>
-        <el-button v-loading="loading" type="primary" @click="handleAdd">确 定</el-button>
-      </div>
-    </el-dialog>
+    <AddUser
+      :dialog-form-visible-add="dialogFormVisibleAdd"
+      @handleAddUser="handleAddUser"
+      @handleCancel="handleCancel"
+    />
+
+    <UpdateUser
+      :dialog-form-visible-edit="dialogFormVisibleEdit"
+      :user-form="updateUserForm"
+      @handleUpdateUser="handleUpdateUser"
+      @handleCancel="handleCancel"
+    />
 
   </div>
 </template>
@@ -132,11 +117,15 @@
 import pagination from '@/components/Pagination'
 import waves from '@/directive/waves/waves' // 指令,在按钮上点击有水波效果
 import { parseTime } from '@/utils'
-import { listUser, addUser } from '@/api/user'
+import { listUser, deleteUser, getUser } from '@/api/user'
+import AddUser from '@/views/user/Add'
+import UpdateUser from '@/views/user/Edit'
 
 export default {
   components: {
-    pagination
+    pagination,
+    AddUser,
+    UpdateUser
   },
   filters: {
     timeFilter(value) {
@@ -155,21 +144,8 @@ export default {
       multipleSelection: [],
       total: 0,
       dialogFormVisibleAdd: false,
-      userForm: {},
-      loading: false,
-      rules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 1, max: 25, message: '长度在 1 到 25 个字符', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 1, max: 25, message: '长度在 1 到 25 个字符', trigger: 'blur' }
-        ],
-        role: [
-          { required: true, message: '请选择角色', trigger: 'change' }
-        ]
-      }
+      dialogFormVisibleEdit: false,
+      updateUserForm: {}
 
     }
   },
@@ -200,35 +176,54 @@ export default {
       this.multipleSelection = val
       console.log(this.multipleSelection[0].name)
     },
-    handleEdit() {
-      // todo
+    handleUpdate(row) {
+      getUser(row.id).then(result => {
+        const { data } = result
+        this.updateUserForm = data
+        this.dialogFormVisibleEdit = true
+      })
     },
-    handleDelete() {
-      // todo
-    },
-    handleAdd() {
-      if (!this.loading) {
-        this.loading = true
-        this.$refs['userForm'].validate((valid) => {
-          if (valid) {
-            addUser(this.userForm).then(result => {
-              this.$notify({
-                title: '操作成功',
-                message: '用户添加成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.loading = false
-              this.dialogFormVisibleAdd = false
-              this.handleFilter() // 刷新列表
-            }).catch(() => {
-              this.loading = false
+    handleDelete(row) {
+      this.$confirm('此操作将永久删除用户,是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log('userId', row.id)
+        deleteUser(row.id).then(result => {
+          const { code, message } = result
+          if (code === 200) {
+            this.$notify({
+              title: '成功',
+              message: message || '删除用户成功',
+              type: 'success',
+              duration: 2000
             })
+            this.handleFilter()
           } else {
-            this.loading = false
+            this.$notify({
+              title: '失败',
+              message: '删除用户失败',
+              type: 'error',
+              duration: 2000
+            })
           }
         })
-      }
+      })
+    },
+    handleCancel() {
+      this.dialogFormVisibleAdd = false
+      this.dialogFormVisibleEdit = false
+    },
+    handleAddUser() {
+      console.log('handleAddUser')
+      this.dialogFormVisibleAdd = false
+      this.handleFilter()
+    },
+    handleUpdateUser() {
+      console.log('handleUpdateUser')
+      this.dialogFormVisibleEdit = false
+      this.handleFilter()
     }
   }
 }

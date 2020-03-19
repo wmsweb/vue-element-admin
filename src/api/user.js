@@ -39,3 +39,26 @@ export function addUser(data) {
   })
 }
 
+export function deleteUser(id) {
+  return request({
+    url: '/user/delete',
+    method: 'post',
+    data: { id }
+  })
+}
+
+export function getUser(id) {
+  return request({
+    url: '/user/get',
+    method: 'get',
+    params: { id }
+  })
+}
+
+export function updateUser(data) {
+  return request({
+    url: '/user/update',
+    method: 'post',
+    data
+  })
+}
