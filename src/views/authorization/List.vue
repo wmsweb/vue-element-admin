@@ -3,7 +3,7 @@
   <div class="app-container">
 
     <aside>
-      <h3>机构列表</h3>
+      <h3>授权列表</h3>
     </aside>
 
     <!--绑定回车事件-->
@@ -30,17 +30,7 @@
         <el-option value="ENABLED" label="启用">启用</el-option>
         <el-option value="DISABLED" label="停用">停用</el-option>
       </el-select>
-      <el-select
-        v-model="listQuery.category"
-        placeholder="业务类别"
-        class="filter-item"
-        style="margin-left: 10px"
-        @change="handleFilter"
-        @clear="handleFilter"
-      >
-        <el-option value="CMS" label="信发系统">信发系统</el-option>
-        <el-option value="JEEGY" label="价签系统">价签系统</el-option>
-      </el-select>
+
       <el-button
         v-waves
         class="filter-item"
@@ -58,26 +48,25 @@
         @click="handleClear"
       >重置</el-button>
     </div>
-    <div>
+    <div class="middle-button">
+
       <el-button
         v-waves
-        plain
-        class="filter-item"
-        type="success"
-        icon="el-icon-document-add"
-        style="margin-left: 10px"
-        @click="handleAdd"
-      >添加</el-button>
-      <el-button
-        v-waves
-        plain
+        v-loading="syncLoading"
         class="filter-item"
         type="success"
         icon="el-icon-refresh"
         style="margin-left: 10px"
-        :loading="true"
         @click="handleSync"
       >手动同步</el-button>
+      <el-button
+        v-waves
+        class="filter-item"
+        type="success"
+        icon="el-icon-document-add"
+        style="margin-left: 10px"
+        @click="dialogFormVisible = true"
+      >添加授权</el-button>
     </div>
 
     <el-table
@@ -89,44 +78,35 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="ID" prop="id" align="center" width="100" />
-      <el-table-column label="机构名称" align="center" width="150">
+      <el-table-column label="ID" prop="id" align="center" width="50" />
+      <el-table-column label="机构名称" align="center">
         <template slot-scope="{row:{name}}"><span>{{ name }}</span></template>
       </el-table-column>
-      <el-table-column label="业务类别" align="center" width="150">
-        <template slot-scope="{row:{category}}"><span>{{ category }}</span></template>
-      </el-table-column>
-      <el-table-column label="机构状态" align="center" width="150">
+      <el-table-column label="机构状态" align="center">
         <template slot-scope="{row:{state}}"><span>{{ state }}</span></template>
       </el-table-column>
-      <el-table-column label="操作人" align="center" width="150">
-        <template slot-scope="{row:{updaterName}}"><span>{{ updaterName }}</span></template>
-      </el-table-column>
-      <!-- <el-table-column label="授权数量" align="center" width="150">
+      <el-table-column label="授权数量" align="center">
         <template slot-scope="{row:{authorizedNum}}"><span>{{ authorizedNum }}</span></template>
       </el-table-column>
-      <el-table-column label="有效期" align="center" width="150">
+      <el-table-column label="有效期" align="center">
         <template slot-scope="{row:{expirationDate}}"><span>{{ expirationDate }}</span></template>
       </el-table-column>
-      <el-table-column label="启用时间" prop="startTime" width="200" align="center">
+      <el-table-column label="启用时间" prop="startTime" align="center">
         <template slot-scope="{row:{startTime}}"><span>{{ startTime | timeFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="停用时间" prop="endTime" width="200" align="center">
+      <el-table-column label="停用时间" prop="endTime" align="center">
         <template slot-scope="{row:{endTime}}"><span>{{ endTime | timeFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="同步状态" align="center" width="150">
+      <el-table-column label="同步状态" align="center">
         <template slot-scope="{row:{syncState}}"><span>{{ syncState }}</span></template>
       </el-table-column> -->
-      <el-table-column label="操作时间" prop="updateTime" width="200" align="center">
+      <el-table-column label="操作时间" prop="updateTime" align="center">
         <template slot-scope="{row:{updateTime}}"><span>{{ updateTime | timeFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="同步状态" prop="syncState" width="200" align="center">
-        <template slot-scope="{row:{syncState}}"><span>{{ syncState }}</span></template>
-      </el-table-column>
-      <el-table-column label="同步时间" prop="syncTime" width="200" align="center">
+      <el-table-column label="同步时间" prop="syncTime" align="center">
         <template slot-scope="{row:{syncTime}}"><span>{{ syncTime | timeFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="300" fixed="right">
+      <el-table-column label="操作" align="center" fixed="right" width="200">
         <template slot-scope="{row}">
           <el-button type="text" icon="el-icon-setting" @click="setReminder(row)">设置提醒</el-button>
           <el-button type="text" icon="el-icon-more-outline" @click="viewDetail(row)">查看明细</el-button>
@@ -142,6 +122,11 @@
       :limit.sync="listQuery.pageSize"
       @pagination="handleFilter"
     />
+
+    <add
+      :dialog-form-visible="dialogFormVisible"
+      @handleCancel="handleCancel"
+    /><!-- 添加授权 -->
   </div>
 
 </template>
@@ -151,12 +136,14 @@
 import pagination from '@/components/Pagination'
 import waves from '@/directive/waves/waves' // 指令,在按钮上点击有水波效果
 import { parseTime } from '@/utils'
-import { listInstitution } from '@/api/institution'
+import { listAuthorization } from '@/api/authorization'
+import Add from '@/views/authorization/Add'
 
 export default {
   components: {
 
-    pagination
+    pagination,
+    Add
   },
   directives: {
     waves
@@ -174,8 +161,11 @@ export default {
       listQuery: {}, // 查询条件
       tableKey: 0, // table识别用
       listLoading: true, // 默认加载
+      syncLoading: false, // 手动同步
       tableList: [], // 表单数据
-      total: 0 // 默认总条数
+      total: 0, // 默认总条数
+      dialogFormVisible: false,
+      addForm: {}
 
     }
   },
@@ -195,7 +185,7 @@ export default {
       this.listQuery = { ...listQuery, ...this.listQuery }
     },
     handleFilter() { // 查询
-      listInstitution(this.listQuery).then(result => {
+      listAuthorization(this.listQuery).then(result => {
         const { total, list } = result.data
         this.total = total
         this.tableList = list
@@ -211,10 +201,33 @@ export default {
     },
     viewDetail() { // 查看明细
       // TODO
+    },
+    handleSync() {
+      if (!this.syncLoading) {
+        this.$confirm('此操作将同步机构信息,是否继续', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.syncLoading = true
+        }).catch(() => {
+          this.syncLoading = false
+        })
+      }
+    },
+    handleCancel() {
+      this.dialogFormVisible = false
+      this.addForm = {}
     }
+
   }
 }
 </script>
 
 <style lang="css" scoped>
+
+.middle-button {
+  padding: 0px 10px 20px 10px
+}
+
 </style>

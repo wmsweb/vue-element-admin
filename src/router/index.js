@@ -55,35 +55,35 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
 
-  {
-    path: '/book',
-    component: Layout,
-    redirect: '/book/create',
-    name: 'book',
-    meta: { title: '图书管理', icon: 'documentation', roles: ['admin'] },
-    children: [
-      {
-        path: '/book/list',
-        name: 'bookList',
-        component: () => import('@/views/book/List'),
-        meta: { title: '图书列表', icon: 'list', roles: ['admin'] }
-      },
-      {
-        path: '/book/create',
-        name: 'bookCreate',
-        component: () => import('@/views/book/Create'),
-        meta: { title: '添加图书', icon: 'edit', roles: ['admin'] }
-      },
-      {
-        path: '/book/edit/:fileName',
-        name: 'bookEdit',
-        hidden: true,
-        component: () => import('@/views/book/Edit'),
-        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-        meta: { title: '编辑图书', icon: 'edit', roles: ['admin'], activeMenu: '/book/list' } // icon : [edit, menu, documentation, location, setting, list]
-      }
-    ]
-  },
+  // {
+  //   path: '/book',
+  //   component: Layout,
+  //   redirect: '/book/create',
+  //   name: 'book',
+  //   meta: { title: '图书管理', icon: 'documentation', roles: ['admin'] },
+  //   children: [
+  //     {
+  //       path: '/book/list',
+  //       name: 'bookList',
+  //       component: () => import('@/views/book/List'),
+  //       meta: { title: '图书列表', icon: 'list', roles: ['admin'] }
+  //     },
+  //     {
+  //       path: '/book/create',
+  //       name: 'bookCreate',
+  //       component: () => import('@/views/book/Create'),
+  //       meta: { title: '添加图书', icon: 'edit', roles: ['admin'] }
+  //     },
+  //     {
+  //       path: '/book/edit/:fileName',
+  //       name: 'bookEdit',
+  //       hidden: true,
+  //       component: () => import('@/views/book/Edit'),
+  //       // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+  //       meta: { title: '编辑图书', icon: 'edit', roles: ['admin'], activeMenu: '/book/list' } // icon : [edit, menu, documentation, location, setting, list]
+  //     }
+  //   ]
+  // },
   // 机构管理
   {
     path: '/institution',
@@ -114,37 +114,6 @@ export const asyncRoutes = [
       }
     ]
   },
-  // 用户管理
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/list',
-    name: 'user',
-    meta: { title: '用户管理', icon: 'peoples', roles: ['admin'] },
-    children: [
-      {
-        path: '/user/list',
-        name: 'userList',
-        component: () => import('@/views/user/List'),
-        meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
-      },
-      {
-        path: '/user/rbac',
-        name: 'rbacUser',
-        component: () => import('@/views/user/Rbac'),
-        meta: { title: '用户权限', icon: 'user', roles: ['admin'] }
-      }
-      // ,
-      // {
-      //   path: '/user/edit/:userId',
-      //   name: 'editUser',
-      //   hidden: true,
-      //   component: () => import('@/views/user/Edit'),
-      //   // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-      //   meta: { title: '编辑用户', icon: 'edit', roles: ['admin'], activeMenu: '/user/list' } // icon : [edit, menu, documentation, location, setting, list]
-      // }
-    ]
-  },
   // 授权管理
   {
     path: '/authorization',
@@ -172,6 +141,28 @@ export const asyncRoutes = [
         component: () => import('@/views/authorization/Edit'),
         // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
         meta: { title: '编辑授权', icon: 'edit', roles: ['admin'], activeMenu: '/authorization/list' } // icon : [edit, menu, documentation, location, setting, list]
+      }
+    ]
+  },
+  // 用户管理
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/list',
+    name: 'user',
+    meta: { title: '用户管理', icon: 'peoples', roles: ['admin'] },
+    children: [
+      {
+        path: '/user/list',
+        name: 'userList',
+        component: () => import('@/views/user/List'),
+        meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
+      },
+      {
+        path: '/user/rbac',
+        name: 'rbacUser',
+        component: () => import('@/views/user/Rbac'),
+        meta: { title: '用户权限', icon: 'user', roles: ['admin'] }
       }
     ]
   },

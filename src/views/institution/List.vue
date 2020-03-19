@@ -254,6 +254,6 @@ export default {
 <style lang="css" scoped>
 
 .middle-button {
-  padding: 15px 10px
+  padding: 0px 10px 20px 10px
 }
 </style>

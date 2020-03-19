@@ -12,7 +12,7 @@
         <el-input v-model="userForm.username" autocomplete="off" clearable maxlength="25" />
       </el-form-item>
       <el-form-item label="密码: " style="width: 400px" prop="password">
-        <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" />
+        <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" show-password/>
       </el-form-item>
       <el-form-item label="角色: " prop="roleName">
         <el-select v-model="userForm.roleName" placeholder="请选择角色">
