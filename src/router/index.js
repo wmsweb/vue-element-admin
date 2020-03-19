@@ -129,22 +129,23 @@ export const asyncRoutes = [
         meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
       },
       {
-        path: '/user/add',
-        name: 'addUser',
-        component: () => import('@/views/user/Add'),
-        meta: { title: '添加用户', icon: 'user', roles: ['admin'] }
-      },
-      {
-        path: '/user/edit/:userId',
-        name: 'editUser',
-        hidden: true,
-        component: () => import('@/views/user/Edit'),
-        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-        meta: { title: '编辑用户', icon: 'edit', roles: ['admin'], activeMenu: '/user/list' } // icon : [edit, menu, documentation, location, setting, list]
+        path: '/user/rbac',
+        name: 'rbacUser',
+        component: () => import('@/views/user/Rbac'),
+        meta: { title: '用户权限', icon: 'user', roles: ['admin'] }
       }
+      // ,
+      // {
+      //   path: '/user/edit/:userId',
+      //   name: 'editUser',
+      //   hidden: true,
+      //   component: () => import('@/views/user/Edit'),
+      //   // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+      //   meta: { title: '编辑用户', icon: 'edit', roles: ['admin'], activeMenu: '/user/list' } // icon : [edit, menu, documentation, location, setting, list]
+      // }
     ]
   },
-   // 授权管理
+  // 授权管理
   {
     path: '/authorization',
     component: Layout,

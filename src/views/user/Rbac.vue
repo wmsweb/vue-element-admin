@@ -1,11 +1,13 @@
 <template>
   <div>
-    edit
+    待开发...
   </div>
 </template>
 
 <script>
 export default {
+
+  name: 'Rbac',
 
   data() {
     return {
@@ -16,4 +18,5 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
 </style>
