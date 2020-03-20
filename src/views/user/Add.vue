@@ -15,9 +15,9 @@
         <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" show-password/>
       </el-form-item>
       <el-form-item label="角色: " prop="roleName">
-        <el-select v-model="userForm.roleName" placeholder="请选择角色">
-          <el-option label="管理权限" value="admin" />
-          <el-option label="查看权限" value="view" />
+        <el-select v-model="userForm.roleId" placeholder="请选择角色">
+          <el-option label="管理权限" value="10000" />
+          <el-option label="查看权限" value="20000" />
         </el-select>
       </el-form-item>
     </el-form>

@@ -30,7 +30,7 @@
           label="剩余天数"
         />
 
-        <el-table-column label="操作" width="200"  align="center">
+        <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -67,7 +67,7 @@
           label="剩余数量"
         />
 
-        <el-table-column label="操作" width="200"  align="center">
+        <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
             <el-button
               type="primary"

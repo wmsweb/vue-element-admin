@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-       avatarGif: avatarGif
+      avatarGif: avatarGif
     }
   },
   computed: {
