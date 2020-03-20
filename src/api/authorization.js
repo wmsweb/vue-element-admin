@@ -8,3 +8,11 @@ export function listAuthorization(params) {
   })
 }
 
+export function authorizationOrderDetails(params) {
+  return request({
+    url: '/authorization/orders',
+    method: 'get',
+    params
+  })
+}
+

@@ -129,19 +129,20 @@ export const asyncRoutes = [
         meta: { title: '授权列表', icon: 'list', roles: ['admin'] }
       },
       {
-        path: '/authorization/add',
+        path: '/authorization/todo',
         name: 'addAuthorization',
-        component: () => import('@/views/authorization/Add'),
-        meta: { title: '添加授权', icon: 'table', roles: ['admin'] }
-      },
-      {
-        path: '/authorization/edit/:authorizationId',
-        name: 'editAuthorization',
-        hidden: true,
-        component: () => import('@/views/authorization/Edit'),
-        // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-        meta: { title: '编辑授权', icon: 'edit', roles: ['admin'], activeMenu: '/authorization/list' } // icon : [edit, menu, documentation, location, setting, list]
+        component: () => import('@/views/authorization/Todo'),
+        meta: { title: 'TODO', icon: 'table', roles: ['admin'] }
       }
+      // ,
+      // {
+      //   path: '/authorization/edit/:authorizationId',
+      //   name: 'editAuthorization',
+      //   hidden: true,
+      //   component: () => import('@/views/authorization/Edit'),
+      //   // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
+      //   meta: { title: '编辑授权', icon: 'edit', roles: ['admin'], activeMenu: '/authorization/list' } // icon : [edit, menu, documentation, location, setting, list]
+      // }
     ]
   },
   // 用户管理

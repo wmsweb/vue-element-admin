@@ -122,11 +122,28 @@
       :limit.sync="listQuery.pageSize"
       @pagination="handleFilter"
     />
-
+    <!-- 添加授权 -->
     <add
       :dialog-form-visible="dialogFormVisible"
       @handleCancel="handleCancel"
-    /><!-- 添加授权 -->
+    />
+    <!-- 添加授权 -->
+
+    <!-- 添加提醒 -->
+    <remind
+      :dialog-remind-visible="dialogRemindVisible"
+      :remind-institution-name="remindInstitutionName"
+      @handleCancel="handleCancel"
+    />
+    <!-- 添加提醒 -->
+
+    <!-- 授权明细 -->
+    <Details
+      :dialog-detail-visible="dialogDetailVisible"
+      @handleCancel="handleCancel"
+    />
+    <!-- 授权明细 -->
+
   </div>
 
 </template>
@@ -136,14 +153,18 @@
 import pagination from '@/components/Pagination'
 import waves from '@/directive/waves/waves' // 指令,在按钮上点击有水波效果
 import { parseTime } from '@/utils'
-import { listAuthorization } from '@/api/authorization'
+import { listAuthorization, authorizationOrderDetails } from '@/api/authorization'
 import Add from '@/views/authorization/Add'
+import Remind from '@/views/authorization/Remind'
+import Details from '@/views/authorization/Details'
 
 export default {
   components: {
 
     pagination,
-    Add
+    Add,
+    Remind,
+    Details
   },
   directives: {
     waves
@@ -165,7 +186,10 @@ export default {
       tableList: [], // 表单数据
       total: 0, // 默认总条数
       dialogFormVisible: false,
-      addForm: {}
+      addForm: {},
+      dialogRemindVisible: false,
+      remindInstitutionName: '',
+      dialogDetailVisible: false
 
     }
   },
@@ -196,11 +220,21 @@ export default {
       this.listQuery = {}
       this.parseQuery()
     },
-    setReminder() { // 设置提醒
+    setReminder(row) { // 设置提醒
       // TODO
+      this.dialogRemindVisible = true
+      this.remindInstitutionName = row.name
     },
-    viewDetail() { // 查看明细
+    viewDetail(row) { // 查看明细
       // TODO
+      const params = {
+        id: row.id
+      }
+      authorizationOrderDetails(params).then(result => {
+        const { data, message, code } = result
+        console.log(data, message, code)
+        this.dialogDetailVisible = true
+      })
     },
     handleSync() {
       if (!this.syncLoading) {
@@ -217,6 +251,8 @@ export default {
     },
     handleCancel() {
       this.dialogFormVisible = false
+      this.dialogRemindVisible = false
+      this.dialogDetailVisible = false
       this.addForm = {}
     }
 

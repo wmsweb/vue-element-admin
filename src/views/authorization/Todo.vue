@@ -1,11 +1,13 @@
 <template>
   <div>
-    edit
+    todo
   </div>
 </template>
 
 <script>
 export default {
+
+  name: 'Todo',
 
   data() {
     return {
