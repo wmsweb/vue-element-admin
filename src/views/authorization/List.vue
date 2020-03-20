@@ -75,6 +75,7 @@
       :data="tableList"
       border
       fit
+      size="medium"
       highlight-current-row
       style="width: 100%"
     >

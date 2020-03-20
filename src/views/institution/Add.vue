@@ -6,6 +6,7 @@
     :hide-required-asterisk="false"
     label-position="left"
     label-width="100px"
+    size="medium"
   >
 
     <sticky :class-name="'sub-navbar'">

@@ -1,97 +1,152 @@
 <template>
-  <div class="dashboard-editor-container">
-    <github-corner class="github-corner" />
+  <div>
+    <div class="dashboard-editor-container" style="margin: 60px">
 
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
+      <panel-group />
 
-    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
+    </div>
+    <div style="margin: 60px; padding: 20px; background-color: rgb(240, 242, 245);">
+      <h3>临超期提醒</h3>
+      <el-table
+        :data="tableData"
+        border
+        stripe
+        fit
+        highlight-current-row
+        size="medium"
+        style="width: 100%"
+      >
 
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
-        </div>
-      </el-col>
-    </el-row>
+        <el-table-column
+          prop="date"
+          label="机构"
+        />
+        <el-table-column
+          prop="name"
+          label="停用时间"
+        />
+        <el-table-column
+          prop="address"
+          label="剩余天数"
+        />
 
-    <el-row :gutter="8">
-      <el-col :xs="{span: 24}" :sm="{span: 24}" :md="{span: 24}" :lg="{span: 12}" :xl="{span: 12}" style="padding-right:8px;margin-bottom:30px;">
-        <transaction-table />
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-        <todo-list />
-      </el-col>
-      <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 12}" :lg="{span: 6}" :xl="{span: 6}" style="margin-bottom:30px;">
-        <box-card />
-      </el-col>
-    </el-row>
+        <el-table-column label="操作" width="200"  align="center">
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)"
+            >查看</el-button>
+          </template>
+        </el-table-column>
+
+      </el-table>
+    </div>
+
+    <div style="margin: 60px; padding: 20px; background-color: rgb(240, 242, 245);">
+      <h3>临超数提醒</h3>
+      <el-table
+        :data="tableNumData"
+        border
+        stripe
+        fit
+        size="medium"
+        highlight-current-row
+        style="width: 100%"
+      >
+
+        <el-table-column
+          prop="date"
+          label="机构"
+        />
+        <el-table-column
+          prop="name"
+          label="授权数量"
+        />
+        <el-table-column
+          prop="address"
+          label="剩余数量"
+        />
+
+        <el-table-column label="操作" width="200"  align="center">
+          <template slot-scope="scope">
+            <el-button
+              type="primary"
+              @click="handleEdit(scope.$index, scope.row)"
+            >查看</el-button>
+          </template>
+        </el-table-column>
+
+      </el-table>
+    </div>
   </div>
 </template>
 
 <script>
-import GithubCorner from '@/components/GithubCorner'
-import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
-import TransactionTable from './components/TransactionTable'
-import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
 
-const lineChartData = {
-  newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
-    actualData: [120, 82, 91, 154, 162, 140, 145]
-  },
-  messages: {
-    expectedData: [200, 192, 120, 144, 160, 130, 140],
-    actualData: [180, 160, 151, 106, 145, 150, 130]
-  },
-  purchases: {
-    expectedData: [80, 100, 121, 104, 105, 90, 100],
-    actualData: [120, 90, 100, 138, 142, 130, 130]
-  },
-  shoppings: {
-    expectedData: [130, 140, 141, 142, 145, 150, 160],
-    actualData: [120, 82, 91, 154, 162, 140, 130]
-  }
-}
+import PanelGroup from './components/PanelGroup'
 
 export default {
   name: 'DashboardAdmin',
   components: {
-    GithubCorner,
-    PanelGroup,
-    LineChart,
-    RaddarChart,
-    PieChart,
-    BarChart,
-    TransactionTable,
-    TodoList,
-    BoxCard
+
+    PanelGroup
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+
+      tableData: [
+        {
+          date: '北京便利蜂',
+          name: '2019.02.02',
+          address: '45'
+        },
+        {
+          date: '北京便利蜂',
+          name: '2019.02.02',
+          address: '45'
+        },
+        {
+          date: '北京便利蜂',
+          name: '2019.02.02',
+          address: '45'
+        },
+        {
+          date: '北京便利蜂',
+          name: '2019.02.02',
+          address: '45'
+        }
+      ],
+      tableNumData: [
+        {
+          date: '北京便利蜂',
+          name: '100',
+          address: '45'
+        },
+        {
+          date: '北京便利蜂',
+          name: '201',
+          address: '45'
+        },
+        {
+          date: '北京便利蜂',
+          name: '201',
+          address: '45'
+        },
+        {
+          date: '北京便利蜂',
+          name: '201',
+          address: '45'
+        }
+      ]
+
     }
   },
   methods: {
-    handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+
+    handleEdit(index, row) {
+      console.log(index, row)
     }
+
   }
 }
 </script>

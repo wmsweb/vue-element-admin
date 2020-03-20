@@ -50,6 +50,7 @@
       border
       fit
       stripe
+      size="medium"
       highlight-current-row
       @selection-change="handleSelectionChange"
     >

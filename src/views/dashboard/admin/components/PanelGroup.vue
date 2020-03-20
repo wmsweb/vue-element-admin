@@ -1,32 +1,32 @@
 <template>
   <el-row :gutter="40" class="panel-group">
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+    <el-col :xs="12" :sm="12" :lg="12" class="card-panel-col">
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            机构数
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="inistitutionNum" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
+    <el-col :xs="12" :sm="12" :lg="12" class="card-panel-col">
+      <div class="card-panel">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+          <svg-icon icon-class="component" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            设备授权总数
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="screenNum" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+    <!-- <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('purchases')">
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="money" class-name="card-panel-icon" />
@@ -51,7 +51,7 @@
           <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
         </div>
       </div>
-    </el-col>
+    </el-col> -->
   </el-row>
 </template>
 
@@ -62,10 +62,14 @@ export default {
   components: {
     CountTo
   },
-  methods: {
-    handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+  data() {
+    return {
+      inistitutionNum: 10000,
+      screenNum: 50000
     }
+  },
+  methods: {
+
   }
 }
 </script>
@@ -79,7 +83,9 @@ export default {
   }
 
   .card-panel {
-    height: 108px;
+    margin: 20px 20px 20px 50px;
+    width: 400px;
+    height: 150px;
     cursor: pointer;
     font-size: 12px;
     position: relative;
@@ -136,6 +142,7 @@ export default {
     }
 
     .card-panel-icon {
+      margin: 15px;
       float: left;
       font-size: 48px;
     }
@@ -144,12 +151,13 @@ export default {
       float: right;
       font-weight: bold;
       margin: 26px;
-      margin-left: 0px;
+      margin-top: 40px;
+      margin-right: 100px;
 
       .card-panel-text {
         line-height: 18px;
         color: rgba(0, 0, 0, 0.45);
-        font-size: 16px;
+        font-size: 20px;
         margin-bottom: 12px;
       }
 
