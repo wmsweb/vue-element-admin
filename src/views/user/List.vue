@@ -59,8 +59,8 @@
       <el-table-column label="用户名称" prop="username" align="center">
         <template slot-scope="{row:{username}}"><span>{{ username }}</span></template>
       </el-table-column>
-      <el-table-column label="用户角色" prop="roleName" align="center">
-        <template slot-scope="{row:{roleName}}"><span>{{ roleName }}</span></template>
+      <el-table-column label="用户角色" prop="alias" align="center">
+        <template slot-scope="{row:{alias}}"><span>{{ alias }}</span></template>
       </el-table-column>
       <el-table-column label="操作时间" prop="updateTime" align="center">
         <template slot-scope="{row:{updateTime}}"><span>{{ updateTime | timeFilter }}</span></template>
