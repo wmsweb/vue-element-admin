@@ -157,13 +157,19 @@ export const asyncRoutes = [
         path: '/user/list',
         name: 'userList',
         component: () => import('@/views/user/List'),
-        meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
+        meta: { title: '用户列表', icon: 'user', roles: ['admin'] }
+      },
+      {
+        path: '/user/role',
+        name: 'role',
+        component: () => import('@/views/user/Role'),
+        meta: { title: '角色管理', icon: 'list', roles: ['admin'] }
       },
       {
         path: '/user/permission',
-        name: 'rbacUser',
+        name: 'permission',
         component: () => import('@/views/user/Permission'),
-        meta: { title: '权限管理', icon: 'user', roles: ['admin'] }
+        meta: { title: '权限管理', icon: 'lock', roles: ['admin'] }
       }
     ]
   },

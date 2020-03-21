@@ -12,12 +12,13 @@
         <el-input v-model="userForm.username" autocomplete="off" clearable maxlength="25" />
       </el-form-item>
       <el-form-item label="密码: " style="width: 400px" prop="password">
-        <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" show-password/>
+        <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" show-password />
       </el-form-item>
       <el-form-item label="角色: " prop="roleName">
         <el-select v-model="userForm.roleId" placeholder="请选择角色">
-          <el-option label="管理权限" value="10000" />
-          <el-option label="查看权限" value="20000" />
+          <!--  <el-option label="管理权限" value="10000" />
+          <el-option label="查看权限" value="20000" /> -->
+          <el-option v-for="item in roleList" :key="item.id" :label="item.description" :value="item.id" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -31,6 +32,7 @@
 <script>
 
 import { addUser } from '@/api/user'
+import { getRoles } from '@/api/role'
 
 export default {
   props: {
@@ -41,6 +43,7 @@ export default {
     return {
       loading: false,
       userForm: {},
+      roleList: [],
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -57,7 +60,16 @@ export default {
 
     }
   },
+  mounted() {
+    this.getRoles()
+  },
   methods: {
+    getRoles() {
+      getRoles().then(result => {
+        const { data } = result
+        this.roleList = data
+      })
+    },
     handleCancel() {
       this.$emit('handleCancel')
     },
@@ -74,7 +86,6 @@ export default {
                 duration: 2000
               })
               this.loading = false
-              this.dialogFormVisibleAdd = false
               this.$emit('handleAddUser')
             }).catch(() => {
               this.loading = false
