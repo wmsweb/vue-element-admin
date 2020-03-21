@@ -160,10 +160,10 @@ export const asyncRoutes = [
         meta: { title: '用户列表', icon: 'list', roles: ['admin'] }
       },
       {
-        path: '/user/rbac',
+        path: '/user/permission',
         name: 'rbacUser',
-        component: () => import('@/views/user/Rbac'),
-        meta: { title: '用户权限', icon: 'user', roles: ['admin'] }
+        component: () => import('@/views/user/Permission'),
+        meta: { title: '权限管理', icon: 'user', roles: ['admin'] }
       }
     ]
   },
