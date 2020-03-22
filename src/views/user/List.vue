@@ -34,6 +34,7 @@
         @click="handleClear"
       >重置</el-button>
       <el-button
+        v-if="addUserButton"
         v-waves
         class="filter-item"
         type="success"
@@ -121,6 +122,7 @@ import { parseTime } from '@/utils'
 import { listUser, deleteUser, getUser } from '@/api/user'
 import AddUser from '@/views/user/Add'
 import UpdateUser from '@/views/user/Edit'
+import store from '@/store'
 
 export default {
   components: {
@@ -146,7 +148,8 @@ export default {
       total: 0,
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
-      updateUserForm: {}
+      updateUserForm: {},
+      addUserButton: store.getters.permissions.includes('user:add')
 
     }
   },

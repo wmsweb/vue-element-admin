@@ -78,6 +78,7 @@ export default {
     },
     handleAddRole() {
       this.dialogFormVisible = false
+      this.getRoles()
     },
     handleCancel() {
       this.dialogFormVisible = false

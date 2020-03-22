@@ -55,35 +55,6 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
 
-  // {
-  //   path: '/book',
-  //   component: Layout,
-  //   redirect: '/book/create',
-  //   name: 'book',
-  //   meta: { title: '图书管理', icon: 'documentation', roles: ['admin'] },
-  //   children: [
-  //     {
-  //       path: '/book/list',
-  //       name: 'bookList',
-  //       component: () => import('@/views/book/List'),
-  //       meta: { title: '图书列表', icon: 'list', roles: ['admin'] }
-  //     },
-  //     {
-  //       path: '/book/create',
-  //       name: 'bookCreate',
-  //       component: () => import('@/views/book/Create'),
-  //       meta: { title: '添加图书', icon: 'edit', roles: ['admin'] }
-  //     },
-  //     {
-  //       path: '/book/edit/:fileName',
-  //       name: 'bookEdit',
-  //       hidden: true,
-  //       component: () => import('@/views/book/Edit'),
-  //       // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-  //       meta: { title: '编辑图书', icon: 'edit', roles: ['admin'], activeMenu: '/book/list' } // icon : [edit, menu, documentation, location, setting, list]
-  //     }
-  //   ]
-  // },
   // 机构管理
   {
     path: '/institution',
@@ -134,15 +105,6 @@ export const asyncRoutes = [
         component: () => import('@/views/authorization/Todo'),
         meta: { title: 'TODO', icon: 'table', roles: ['admin'] }
       }
-      // ,
-      // {
-      //   path: '/authorization/edit/:authorizationId',
-      //   name: 'editAuthorization',
-      //   hidden: true,
-      //   component: () => import('@/views/authorization/Edit'),
-      //   // activeMenu: 用户指定高亮的路由, 因为自己没有菜单 hidden: true
-      //   meta: { title: '编辑授权', icon: 'edit', roles: ['admin'], activeMenu: '/authorization/list' } // icon : [edit, menu, documentation, location, setting, list]
-      // }
     ]
   },
   // 用户管理

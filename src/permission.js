@@ -34,10 +34,10 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
-          const { roles } = await store.dispatch('user/getInfo')
+          const { roles, urlRoles } = await store.dispatch('user/getInfo')
 
           // generate accessible routes map based on roles
-          const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+          const accessRoutes = await store.dispatch('permission/generateRoutes', { roles, urlRoles })
 
           // 动态添加这个角色的路由(把所有动态路由里面有角色的路由过滤出来,添加到所有路由里面),生成左侧sidebar
           router.addRoutes(accessRoutes)

@@ -9,12 +9,10 @@
     </aside>
 
     <el-row>
-      <el-col :span="12" />
-      <el-col :span="12">
+      <el-col :span="10">
         <el-tree
           ref="permissionTree"
           :data="permissionData"
-          show-checkbox
           :indent="32"
           node-key="id"
           :check-strictly="true"
@@ -125,7 +123,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 14px;
+    font-size: 18px;
     padding-right: 8px;
   }
+.el-button--mini{
+  font-size: 16px;
+}
 </style>
