@@ -69,9 +69,9 @@ docker build -t $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION --build-arg ENVIRONMENT
 
 
 ## 启动
-docker run --name $IMAGE_NAME -p 80:80 -d $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION
+# docker run --rm --name $IMAGE_NAME -p 80:80 -d $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION
 
-echo "docker run --name $IMAGE_NAME -p 80:80 -d $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION"
+# echo "docker run --rm --name $IMAGE_NAME -p 80:80 -d $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION"
 
 
 
