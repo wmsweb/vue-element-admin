@@ -3,7 +3,7 @@
 set -u
 set -e
 
-# read -p "please input env:" -t 60 ENVIRONMENT
+## =========================================================
 
 echo "请选择要发布的环境?"
 
@@ -39,11 +39,31 @@ esac
 
 ## =======================================================
 
-IMAGE_DOMAIN="domain"
-IMAGE_NAME="vue-admin"
-IMAGE_VERSION=$(date +%Y%m%d%H%M)
+sleep 3
+
+## 打包
+echo "============= 开始npm打包: npm run build:$ENVIRONMENT=================="
 
 npm run build:$ENVIRONMENT
+
+echo " ================== npm打包完成 ================== "
+
+## =======================================================
+
+sleep 3
+
+# 构建镜像
+
+
+
+IMAGE_NAME="vue-admin"
+IMAGE_ID=$(date +%Y%m%d%H%M)
+IMAGE_REGISTRY="registry.cn-beijing.aliyuncs.com"
+IMAGE_NAMESPACE="boe-com"
+IMAGE_FULLNAME=$IMAGE_REGISTRY/$IMAGE_NAMESPACE/$IMAGE_NAME:$IMAGE_ID
+
+echo " ================== 开始构建镜像 IMAGE_FULLNAME: $IMAGE_FULLNAME ================== "
+
 
 
 ## 关闭shop_admin容器
@@ -56,9 +76,26 @@ npm run build:$ENVIRONMENT
 #docker rmi --force $(docker images | grep vue-admin | awk '{print $3}')
 
 ## 构建shop/admin:$image_version镜像
-docker build -t $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION --build-arg ENVIRONMENT=$ENVIRONMENT .
+#docker build -t registry.cn-beijing.aliyuncs.com/prod-bigbay/$IMAGE_NAME:$IMAGE_ID --build-arg JAR_FILE=$JAR_FILE .
+docker build -t $IMAGE_FULLNAME .
+
+echo " ================== 镜像构建完成 ================== "
+
+sleep 3
+## =========================================================================
+
+echo " ================== 开始推送镜像到远程仓库 ================== "
+
+REGISTRY_USERNAME="t_1516617822136_0451"
+read -p "please input image registry password: " -t 60 REGISTRY_PASSWORD
 
 
+# docker logout
+echo ${REGISTRY_PASSWORD:-"woms0613"} | docker login $IMAGE_REGISTRY -u $REGISTRY_USERNAME --password-stdin
+docker push $IMAGE_FULLNAME
+
+
+echo " ================== 镜像推送完成 ================== "
 
 ## 删除build过程中产生的镜像    #docker image prune -a -f
 # docker rmi $(docker images -f "dangling=true" -q)
@@ -67,6 +104,8 @@ docker build -t $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION --build-arg ENVIRONMENT
 # docker system prune -a -f
 
 
+## docker login aliyun
+# sudo docker login --username=t_1516617822136_0451 registry.cn-beijing.aliyuncs.com
 
 ## 启动
 # docker run --rm --name $IMAGE_NAME -p 80:80 -d $IMAGE_DOMAIN/$IMAGE_NAME:$IMAGE_VERSION
