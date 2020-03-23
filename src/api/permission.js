@@ -30,3 +30,18 @@ export function addPermission(data) {
     data
   })
 }
+
+export function deletePermission(id) {
+  return request({
+    url: `/permission/delete/${id}`,
+    method: 'delete'
+  })
+}
+
+export function updatePermission(data) {
+  return request({
+    url: '/permission/update',
+    method: 'put',
+    data
+  })
+}

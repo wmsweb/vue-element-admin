@@ -16,8 +16,6 @@
       </el-form-item>
       <el-form-item label="角色: " prop="roleName">
         <el-select v-model="userForm.roleId" placeholder="请选择角色">
-          <!--  <el-option label="管理权限" value="10000" />
-          <el-option label="查看权限" value="20000" /> -->
           <el-option v-for="item in roleList" :key="item.id" :label="item.description" :value="item.id" />
         </el-select>
       </el-form-item>

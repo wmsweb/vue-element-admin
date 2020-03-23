@@ -15,8 +15,22 @@
         <el-table-column prop="description" label="名称" />
         <el-table-column label="操作" width="260">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button
+              v-if="scope.row.name !== 'admin' "
+              size="mini"
+              type="primary"
+              @click="handleEdit(scope.row)"
+            >
+              编辑
+            </el-button>
+            <el-button
+              v-if="scope.row.name !== 'admin' "
+              type="danger"
+              size="mini"
+              @click="handleDelete(scope.$index, scope.row)"
+            >
+              删除
+            </el-button>
             <el-button size="mini" type="success" @click="handleRolePermission(scope.row)">设置权限</el-button>
           </template>
         </el-table-column>
@@ -24,6 +38,12 @@
     </div>
 
     <addRole :dialog-form-visible="dialogFormVisible" @handleAddRole="handleAddRole" @handleCancel="handleCancel" />
+    <editRole
+      :dialog-edit-form-visible="dialogEditFormVisible"
+      :editRoleForm="editRoleForm"
+      @handleEditRole="handleEditRole"
+      @handleCancel="handleCancel"
+    />
 
     <rolePermission
       :checked-keys="checkedKeys"
@@ -37,14 +57,16 @@
 import { rolePermission } from '@/api/permission'
 import Sticky from '@/components/Sticky/index'
 import AddRole from '@/views/user/AddRole'
+import EditRole from '@/views/user/EditRole'
 import RolePermission from '@/views/user/RolePermission'
-import { getRoles } from '@/api/role'
+import { getRoles, deleteRole } from '@/api/role'
 
 export default {
 
   components: {
     Sticky,
     AddRole,
+    EditRole,
     rolePermission: RolePermission
   },
 
@@ -55,7 +77,9 @@ export default {
       dialogTreeVisible: false,
       tableData: [],
       checkedKeys: [],
-      roleId: 0
+      roleId: 0,
+      dialogEditFormVisible: false,
+      editRoleForm: {}
     }
   },
   mounted() {
@@ -80,15 +104,37 @@ export default {
       this.dialogFormVisible = false
       this.getRoles()
     },
+    handleEditRole() {
+      this.dialogEditFormVisible = false
+      this.getRoles()
+    },
     handleCancel() {
       this.dialogFormVisible = false
       this.dialogTreeVisible = false
+      this.dialogEditFormVisible = false
     },
-    handleEdit(index, row) {
-      // todo
+    handleEdit(row) {
+      this.dialogEditFormVisible = true
+      this.editRoleForm = {
+        id: row.id,
+        name: row.name,
+        alias: row.description
+      }
     },
     handleDelete(index, row) {
-      // todo
+      this.$confirm('此操作将永久删除角色,是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteRole(row.id).then(result => {
+          this.$message({
+            message: '角色删除成功',
+            type: 'success'
+          })
+          this.getRoles()
+        })
+      })
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit">
+  <el-dialog title="编辑用户" :visible.sync="dialogFormVisibleEdit" :before-close="handleCancel">
     <el-form
       ref="userForm"
       :model="userForm"
@@ -8,16 +8,18 @@
       label-position="left"
       label-width="100px"
     >
+      <el-form-item label="ID: " style="width: 400px" prop="id">
+        <el-input v-model="userForm.id" autocomplete="off" disabled clearable maxlength="25" />
+      </el-form-item>
       <el-form-item label="用户名: " style="width: 400px" prop="username">
         <el-input v-model="userForm.username" autocomplete="off" clearable maxlength="25" />
       </el-form-item>
       <el-form-item label="密码: " style="width: 400px" prop="password">
-        <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" show-password/>
+        <el-input v-model="userForm.password" autocomplete="off" clearable maxlength="25" show-password />
       </el-form-item>
-      <el-form-item label="角色: " prop="roleName">
-        <el-select v-model="userForm.roleName" placeholder="请选择角色">
-          <el-option label="管理权限" value="admin" />
-          <el-option label="查看权限" value="view" />
+      <el-form-item label="角色: " prop="roleId">
+        <el-select v-model="userForm.roleId" placeholder="请选择角色">
+          <el-option v-for="item in roleList" :key="item.id" :label="item.description" :value="item.id" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -31,6 +33,7 @@
 <script>
 
 import { updateUser } from '@/api/user'
+import { getRoles } from '@/api/role'
 
 export default {
 
@@ -46,7 +49,6 @@ export default {
       }
     }
   },
-
   data() {
     return {
       rules: {
@@ -58,14 +60,24 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 1, max: 25, message: '长度在 1 到 25 个字符', trigger: 'blur' }
         ],
-        role: [
+        roleId: [
           { required: true, message: '请选择角色', trigger: 'change' }
         ]
       },
-      loading: false
+      loading: false,
+      roleList: []
     }
   },
+  mounted() {
+    this.getRoles()
+  },
   methods: {
+    getRoles() {
+      getRoles().then(result => {
+        const { data } = result
+        this.roleList = data
+      })
+    },
     handleCancel() {
       this.$emit('handleCancel')
     },

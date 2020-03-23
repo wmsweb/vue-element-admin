@@ -1,24 +1,27 @@
 <template>
 
-  <el-dialog title="添加角色" :visible.sync="dialogFormVisible" :before-close="handleClose">
+  <el-dialog title="编辑角色" :visible.sync="dialogEditFormVisible" :before-close="handleCancel">
     <el-form
-      ref="roleForm"
-      :model="roleForm"
+      ref="editRoleForm"
+      :model="editRoleForm"
       :rules="rules"
       :hide-required-asterisk="false"
       label-position="left"
       label-width="100px"
     >
+      <el-form-item label="角色ID: " style="width: 400px" prop="id">
+        <el-input v-model="editRoleForm.id" autocomplete="off" disabled clearable maxlength="25" />
+      </el-form-item>
       <el-form-item label="角色KEY: " style="width: 400px" prop="name">
-        <el-input v-model="roleForm.name" autocomplete="off" clearable maxlength="25" />
+        <el-input v-model="editRoleForm.name" autocomplete="off" clearable maxlength="25" />
       </el-form-item>
       <el-form-item label="角色名称: " style="width: 400px" prop="alias">
-        <el-input v-model="roleForm.alias" autocomplete="off" clearable maxlength="25" />
+        <el-input v-model="editRoleForm.alias" autocomplete="off" clearable maxlength="25" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="handleCancel">取 消</el-button>
-      <el-button v-loading="loading" type="primary" @click="handleAdd">确 定</el-button>
+      <el-button v-loading="loading" type="primary" @click="handleEdit">确 定</el-button>
     </div>
   </el-dialog>
 
@@ -26,17 +29,22 @@
 
 <script>
 
-import { addRole } from '@/api/role'
+import { updateRole } from '@/api/role'
 
 export default {
   props: {
-    dialogFormVisible: Boolean
+    dialogEditFormVisible: Boolean,
+    editRoleForm: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    }
   },
 
   data() {
     return {
       loading: false,
-      roleForm: {},
       rules: {
         name: [
           { required: true, message: '请输入角色名称', trigger: 'blur' },
@@ -54,24 +62,21 @@ export default {
     handleCancel() {
       this.$emit('handleCancel')
     },
-    handleClose() {
-      this.$emit('handleCancel')
-    },
-    handleAdd() {
+    handleEdit() {
       if (!this.loading) {
         this.loading = true
-        this.$refs['roleForm'].validate((valid) => {
+        this.$refs['editRoleForm'].validate((valid) => {
           if (valid) {
-            addRole(this.roleForm).then(result => {
+            updateRole(this.editRoleForm).then(result => {
               this.$notify({
                 title: '操作成功',
-                message: '角色添加成功',
+                message: '角色编辑成功',
                 type: 'success',
-                duration: 2000
+                duration: 3000
               })
               this.loading = false
-              this.roleForm = {}
-              this.$emit('handleAddRole')
+              this.editRoleForm = {}
+              this.$emit('handleEditRole')
             }).catch(() => {
               this.loading = false
             })

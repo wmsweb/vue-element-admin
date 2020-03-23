@@ -45,18 +45,27 @@
       @handleCancel="handleCancel"
       @handleAdd="handleAdd"
     />
+    <editPermission
+      :dialog-edit-form-visible="dialogEditFormVisible"
+      :permission-edit-form="permissionEditForm"
+      @handleCancel="handleCancel"
+      @handleEdit="handleEdit"
+    />
 
   </div>
 </template>
 <script>
-import { permissionTree } from '@/api/permission'
+import { permissionTree, deletePermission } from '@/api/permission'
 import Sticky from '@/components/Sticky/index'
 import AddPermission from '@/views/user/AddPermission'
+import EditPermission from '@/views/user/EditPermission'
+
 export default {
 
   components: {
     Sticky,
-    AddPermission
+    AddPermission,
+    EditPermission
   },
 
   data() {
@@ -68,7 +77,9 @@ export default {
         children: 'children',
         label: 'description'
       },
-      pid: 0
+      pid: 0,
+      dialogEditFormVisible: false,
+      permissionEditForm: {}
 
     }
   },
@@ -85,9 +96,15 @@ export default {
       this.dialogFormVisible = false
       this.permissionTree()
     },
+    handleEdit() {
+      this.pid = 0
+      this.dialogEditFormVisible = false
+      this.permissionTree()
+    },
     handleCancel() {
       this.pid = 0
       this.dialogFormVisible = false
+      this.dialogEditFormVisible = false
     },
     permissionTree() {
       permissionTree().then(result => {
@@ -98,20 +115,25 @@ export default {
     append(data) {
       this.dialogFormVisible = true
       this.pid = data.id
-      // const newChild = { id: id++, label: 'testtest', children: [] }
-      // if (!data.children) {
-      //   this.$set(data, 'children', [])
-      // }
-      // data.children.push(newChild)
     },
     edit(node, data) {
-      // console.log(node, data)
+      this.dialogEditFormVisible = true
+      this.permissionEditForm = { ...data }
     },
     remove(node, data) {
-      // const parent = node.parent
-      // const children = parent.data.children || parent.data
-      // const index = children.findIndex(d => d.id === data.id)
-      // children.splice(index, 1)
+      this.$confirm('删除权限将永久删除本权限及其子权限,是否继续', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePermission(data.id).then(result => {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
+          this.permissionTree()
+        })
+      })
     }
   }
 }
