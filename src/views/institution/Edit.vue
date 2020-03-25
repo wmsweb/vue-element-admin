@@ -167,6 +167,7 @@ export default {
         this.loading = true
         this.$refs[formName].validate((valid, fields) => {
           if (valid) { // 校验通过
+            this.numberForm.id = this.$route.params.institutionId
             updateInstitution(this.numberForm).then(result => {
               const { message } = result
               this.$notify({
@@ -176,6 +177,7 @@ export default {
                 duration: 2000
               })
               this.loading = false
+              this.$router.push('/institution/list')
             }).catch(() => {
               this.loading = false
             })
