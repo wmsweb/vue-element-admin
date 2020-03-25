@@ -146,7 +146,7 @@
 import pagination from '@/components/Pagination'
 import waves from '@/directive/waves/waves' // 指令,在按钮上点击有水波效果
 import { parseTime } from '@/utils'
-import { listInstitution } from '@/api/institution'
+import { listInstitution, deleteInstitution, stopInstitution, syncInstitution } from '@/api/institution'
 
 export default {
   components: {
@@ -167,7 +167,7 @@ export default {
       return value === 'ENABLED' ? '启用' : '停用'
     },
     syncStateFilter(value) {
-      return value === '1' ? '同步成功' : '同步失败'
+      return value === 1 ? '同步成功' : '同步失败'
     }
   },
   data() {
@@ -199,9 +199,9 @@ export default {
     },
     handleFilter() { // 查询
       listInstitution(this.listQuery).then(result => {
-        const { total, list } = result.data
+        const { total, records } = result.data
         this.total = total
-        this.tableList = list
+        this.tableList = records
         this.listLoading = false
       }).catch(() => {
         this.listLoading = false
@@ -215,12 +215,28 @@ export default {
       this.$router.push('/institution/add')
     },
     handleSync() { // 同步
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          message: '请选中要同步的机构',
+          type: 'error'
+        })
+        return
+      }
       this.$confirm('是否重新同步授权信息到业务系统？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(this.multipleSelection)
+        const ids = this.multipleSelection.map(item => {
+          return item['id']
+        })
+        syncInstitution(ids).then(result => {
+          this.$message({
+            message: '同步成功',
+            type: 'success'
+          })
+          this.handleFilter()
+        })
       })
     },
     handleEdit(row) { // 编辑
@@ -232,7 +248,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.id)
+        deleteInstitution(row.id).then(result => {
+          this.$message({
+            message: '机构删除成功',
+            type: 'success'
+          })
+          this.handleFilter()
+        })
       })
     },
     handleStop(row) { // 停用
@@ -241,12 +263,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        console.log(row.id)
+        stopInstitution(row.id).then(result => {
+          this.$message({
+            message: '机构停用成功',
+            type: 'success'
+          })
+          this.handleFilter()
+        })
       })
     },
     handleSelectionChange(val) { // 表单选中
       this.multipleSelection = val
-      console.log(this.multipleSelection[0].name)
     }
   }
 }

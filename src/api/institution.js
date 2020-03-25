@@ -39,3 +39,28 @@ export function addInstitution(data) {
   })
 }
 
+// 删除机构
+export function deleteInstitution(id) {
+  return request({
+    url: `/institution/delete/${id}`,
+    method: 'delete'
+  })
+}
+
+// 停用机构
+export function stopInstitution(id) {
+  return request({
+    url: `/institution/stop/${id}`,
+    method: 'put'
+  })
+}
+
+// 手动同步
+export function syncInstitution(data) {
+  return request({
+    url: '/institution/sync',
+    method: 'put',
+    data
+  })
+}
+

@@ -149,6 +149,7 @@ export default {
                 duration: 2000
               })
               this.loading = false
+              this.$router.push('/institution/list')
             }).catch(() => {
               this.loading = false
             })
