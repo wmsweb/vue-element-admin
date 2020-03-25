@@ -64,3 +64,10 @@ export function syncInstitution(data) {
   })
 }
 
+export function getEnabledInstitutions() {
+  return request({
+    url: '/institution/getEnabledInstitutions',
+    method: 'get'
+  })
+}
+

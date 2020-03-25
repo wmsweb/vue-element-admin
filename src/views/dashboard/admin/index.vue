@@ -2,7 +2,10 @@
   <div>
     <div class="dashboard-editor-container" style="margin: 60px">
 
-      <panel-group />
+      <panel-group
+        :screen-num="screenNum"
+        :inistitution-num="inistitutionNum"
+      />
 
     </div>
     <div style="margin: 60px; padding: 20px; background-color: rgb(240, 242, 245);">
@@ -85,6 +88,8 @@
 
 import PanelGroup from './components/PanelGroup'
 
+import { getDashboardData } from '@/api/dashboard'
+
 export default {
   name: 'DashboardAdmin',
   components: {
@@ -93,7 +98,8 @@ export default {
   },
   data() {
     return {
-
+      inistitutionNum: 0,
+      screenNum: 0,
       tableData: [
         {
           date: '北京便利蜂',
@@ -141,8 +147,17 @@ export default {
 
     }
   },
+  mounted() {
+    this.getDashboardData()
+  },
   methods: {
-
+    getDashboardData() {
+      getDashboardData().then(result => {
+        const { data } = result
+        this.inistitutionNum = data.inistitutionNum
+        this.screenNum = data.screenNum
+      })
+    },
     handleEdit(index, row) {
       console.log(index, row)
     }

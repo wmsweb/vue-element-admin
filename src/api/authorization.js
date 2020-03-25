@@ -8,6 +8,14 @@ export function listAuthorization(params) {
   })
 }
 
+export function addAuthorization(data) {
+  return request({
+    url: '/authorization/add',
+    method: 'post',
+    data
+  })
+}
+
 export function authorizationOrderDetails(params) {
   return request({
     url: '/authorization/orders',
@@ -15,4 +23,5 @@ export function authorizationOrderDetails(params) {
     params
   })
 }
+
 

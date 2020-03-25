@@ -62,10 +62,24 @@ export default {
   components: {
     CountTo
   },
+  props: {
+    inistitutionNum: {
+      type: Number,
+      default: function() {
+        return 0
+      }
+    },
+    screenNum: {
+      type: Number,
+      default: function() {
+        return 0
+      }
+    }
+
+  },
   data() {
     return {
-      inistitutionNum: 10000,
-      screenNum: 50000
+
     }
   },
   methods: {

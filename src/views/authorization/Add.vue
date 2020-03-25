@@ -8,26 +8,37 @@
       label-position="left"
       label-width="150px"
     >
-      <el-form-item label="机构名称: " prop="name" style="width: 500px">
+      <el-form-item label="机构名称: " prop="institutionId" style="width: 500px">
         <!--下拉框-->
-        <el-select v-model="addForm.name" placeholder="机构名称">
-          <!--<el-option :value="1">11</el-option> -->
-          <!--<el-option :value="2">22</el-option> -->
-          <!--<el-option :value="3">33</el-option> -->
-
-          <el-option v-for="item in names" :key="item.value" :label="item.label" :value="item.label" />
-
+        <el-select v-model="addForm.institutionId" placeholder="机构名称" style="width: 350px">
+          <el-option v-for="item in names" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
       </el-form-item>
 
-      <el-form-item label="授权设备数量: " prop="num" style="width: 500px">
-        <el-input v-model="addForm.num" autocomplete="off" clearable maxlength="25" />
+      <el-form-item label="授权设备数量: " prop="authorizeNum" style="width: 500px">
+        <el-input v-model.number="addForm.authorizeNum" autocomplete="off" clearable maxlength="25" />
       </el-form-item>
-      <el-form-item label="有效时间: " prop="date1" style="width: 500px">
-        <el-date-picker v-model="addForm.date1" type="date" placeholder="生效日期" clearable style="width: 100%;" />
+      <el-form-item label="有效时间: " prop="startTime" style="width: 500px">
+        <el-date-picker
+          v-model="addForm.startTime"
+          type="date"
+          placeholder="生效日期"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          :picker-options="expireDateOption"
+          clearable
+          style="width: 100%;"
+        />
       </el-form-item>
-      <el-form-item label="失效时间: " prop="date2" style="width: 500px">
-        <el-date-picker v-model="addForm.date2" type="date" placeholder="失效日期" clearable style="width: 100%;" />
+      <el-form-item label="失效时间: " prop="endTime" style="width: 500px">
+        <el-date-picker
+          v-model="addForm.endTime"
+          type="date"
+          placeholder="失效日期"
+          :picker-options="expireDateOption"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          clearable
+          style="width: 100%;"
+        />
       </el-form-item>
 
     </el-form>
@@ -39,37 +50,108 @@
 </template>
 
 <script>
+
+import { getEnabledInstitutions } from '@/api/institution'
+import { addAuthorization } from '@/api/authorization'
+
 export default {
 
   props: {
-    dialogFormVisible: Boolean,
-    addForm: {
-      type: Object,
-      default: function() {
-        return {}
-      }
-    }
+    dialogFormVisible: Boolean
   },
   data() {
+    var validateStartTime = (rule, value, callback) => {
+      var curDate = new Date()
+      if (value < curDate) {
+        callback(new Error('开始日期必须大于等于今天'))
+      } else if (this.addForm.endTime && this.addForm.endTime < value) {
+        callback(new Error('开始时间必须小于等于结束时间'))
+      } else {
+        callback()
+      }
+    }
+    var validateEndTime = (rule, value, callback) => {
+      if (this.addForm.startTime && this.addForm.startTime > value) {
+        callback(new Error('结束日期必须大于等于开始时间'))
+      }
+      var curDate = new Date()
+      if (value < curDate) {
+        callback(new Error('结束日期必须大于等于今天'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       loading: false,
-      rules: {},
-      names: [
-        { label: '家乐福', value: '1' },
-        { label: '百家乐', value: '2' },
-        { label: '沃尔玛', value: '3' }
-      ]
+      rules: {
+        institutionId: [
+          { required: true, message: '请选择机构', trigger: 'click' }
+        ],
+        authorizeNum: [
+          { required: true, message: '请输入授权数量', trigger: 'blur' },
+          { type: 'number', message: '数量必须为数字值', trigger: 'blur' }
+
+        ],
+        startTime: [
+          { required: true, message: '请选择开始时间', trigger: 'blur' },
+          { validator: validateStartTime, trigger: 'blur' }
+        ],
+        endTime: [
+          { required: true, message: '请选择结束时间', trigger: 'blur' },
+          { validator: validateEndTime, trigger: 'blur' }
+        ]
+      },
+      expireDateOption: {
+        disabledDate(date) {
+          return date.getTime() < Date.now()
+        }
+      },
+      addForm: {},
+      names: []
 
     }
   },
+  mounted() {
+    getEnabledInstitutions().then(result => {
+      const { data } = result
+      this.names = data
+    })
+  },
   methods: {
     handleCancel() {
+      this.$refs['addForm'].clearValidate()
+      this.addForm = {}
+      // this.$refs['addForm'].resetFields()
       this.$emit('handleCancel')
     },
     handleAdd() {
-      this.$emit('handleCancel')
+      if (!this.loading) {
+        this.loading = true
+        this.$refs['addForm'].validate((valid) => {
+          if (valid) {
+            addAuthorization(this.addForm).then(result => {
+              this.$notify({
+                title: '操作成功',
+                message: '添加授权成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.loading = false
+              this.$emit('handleAdd')
+            }).catch(() => {
+              this.loading = false
+            })
+          } else {
+            this.loading = false
+          }
+        })
+      }
     },
     handleClose() {
+      this.$refs['addForm'].clearValidate()
+      this.addForm = {}
+      // this.$refs['addForm'].resetFields()
       this.$emit('handleCancel')
     }
   }

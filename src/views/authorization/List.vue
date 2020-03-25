@@ -65,7 +65,7 @@
         type="success"
         icon="el-icon-document-add"
         style="margin-left: 10px"
-        @click="dialogFormVisible = true"
+        @click="addAuthorization"
       >添加授权</el-button>
     </div>
 
@@ -79,12 +79,12 @@
       highlight-current-row
       style="width: 100%"
     >
-      <el-table-column label="ID" prop="id" align="center" width="50" />
+      <el-table-column label="ID" prop="id" align="center" />
       <el-table-column label="机构名称" align="center">
         <template slot-scope="{row:{name}}"><span>{{ name }}</span></template>
       </el-table-column>
       <el-table-column label="机构状态" align="center">
-        <template slot-scope="{row:{state}}"><span>{{ state }}</span></template>
+        <template slot-scope="{row:{state}}"><span>{{ state | stateFilter }}</span></template>
       </el-table-column>
       <el-table-column label="授权数量" align="center">
         <template slot-scope="{row:{authorizedNum}}"><span>{{ authorizedNum }}</span></template>
@@ -99,7 +99,7 @@
         <template slot-scope="{row:{endTime}}"><span>{{ endTime | timeFilter }}</span></template>
       </el-table-column>
       <el-table-column label="同步状态" align="center">
-        <template slot-scope="{row:{syncState}}"><span>{{ syncState }}</span></template>
+        <template slot-scope="{row:{syncState}}"><span>{{ syncState | syncStateFilter }}</span></template>
       </el-table-column> -->
       <el-table-column label="操作时间" prop="updateTime" align="center">
         <template slot-scope="{row:{updateTime}}"><span>{{ updateTime | timeFilter }}</span></template>
@@ -127,6 +127,7 @@
     <add
       :dialog-form-visible="dialogFormVisible"
       @handleCancel="handleCancel"
+      @handleAdd="handleAdd"
     />
     <!-- 添加授权 -->
 
@@ -141,6 +142,7 @@
     <!-- 授权明细 -->
     <Details
       :dialog-detail-visible="dialogDetailVisible"
+      :detail-data="detailData"
       @handleCancel="handleCancel"
     />
     <!-- 授权明细 -->
@@ -176,6 +178,22 @@ export default {
     },
     timeFilter(value) {
       return value ? parseTime(value, '{y}-{m}-{d} {h}:{i}') : '/'
+    },
+    stateFilter(value) {
+      if (value === 'ENABLED') {
+        return '启用'
+      }
+      if (value === 'DISABLED') {
+        return '停用'
+      }
+    },
+    syncStateFilter(value) {
+      if (value === 1) {
+        return '已同步'
+      }
+      if (value === 0) {
+        return '未同步'
+      }
     }
   },
   data() {
@@ -187,10 +205,10 @@ export default {
       tableList: [], // 表单数据
       total: 0, // 默认总条数
       dialogFormVisible: false,
-      addForm: {},
       dialogRemindVisible: false,
       remindInstitutionName: '',
-      dialogDetailVisible: false
+      dialogDetailVisible: false,
+      detailData: {}
 
     }
   },
@@ -201,6 +219,9 @@ export default {
     this.handleFilter()
   },
   methods: {
+    addAuthorization() {
+      this.dialogFormVisible = true
+    },
     parseQuery() { // 设置默认的查询参数
       const listQuery = {
         page: 1,
@@ -232,9 +253,9 @@ export default {
         id: row.id
       }
       authorizationOrderDetails(params).then(result => {
-        const { data, message, code } = result
-        console.log(data, message, code)
+        const { data } = result
         this.dialogDetailVisible = true
+        this.detailData = data
       })
     },
     handleSync() {
@@ -254,7 +275,10 @@ export default {
       this.dialogFormVisible = false
       this.dialogRemindVisible = false
       this.dialogDetailVisible = false
-      this.addForm = {}
+    },
+    handleAdd() {
+      this.handleCancel()
+      this.handleFilter()
     }
 
   }
