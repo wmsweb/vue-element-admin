@@ -125,6 +125,7 @@
     />
     <!-- 添加授权 -->
     <add
+      v-if="addAuthorizationButton"
       :dialog-form-visible="dialogFormVisible"
       @handleCancel="handleCancel"
       @handleAdd="handleAdd"
@@ -133,6 +134,7 @@
 
     <!-- 添加提醒 -->
     <remind
+      v-if="remindAuthorizationButton"
       :dialog-remind-visible="dialogRemindVisible"
       :remind-institution-name="remindInstitutionName"
       @handleCancel="handleCancel"
@@ -141,6 +143,7 @@
 
     <!-- 授权明细 -->
     <Details
+      v-if="ordersAuthorizationButton"
       :dialog-detail-visible="dialogDetailVisible"
       :detail-data="detailData"
       @handleCancel="handleCancel"
@@ -160,6 +163,7 @@ import { listAuthorization, authorizationOrderDetails } from '@/api/authorizatio
 import Add from '@/views/authorization/Add'
 import Remind from '@/views/authorization/Remind'
 import Details from '@/views/authorization/Details'
+import store from '@/store'
 
 export default {
   components: {
@@ -208,7 +212,10 @@ export default {
       dialogRemindVisible: false,
       remindInstitutionName: '',
       dialogDetailVisible: false,
-      detailData: {}
+      detailData: {},
+      addAuthorizationButton: store.getters.permissions.includes('authorization:add'),
+      remindAuthorizationButton: store.getters.permissions.includes('authorization:remind'),
+      ordersAuthorizationButton: store.getters.permissions.includes('authorization:orders')
 
     }
   },

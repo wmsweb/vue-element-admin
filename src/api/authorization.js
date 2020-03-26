@@ -24,4 +24,11 @@ export function authorizationOrderDetails(params) {
   })
 }
 
-
+// 设置提醒
+export function handleRemind(data) {
+  return request({
+    url: '/authorization/remind',
+    method: 'post',
+    data
+  })
+}

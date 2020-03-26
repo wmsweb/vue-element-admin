@@ -60,6 +60,7 @@
     </div>
     <div class="middle-button">
       <el-button
+        v-if="addInstitutionButton"
         v-waves
         plain
         class="filter-item"
@@ -69,6 +70,7 @@
         @click="handleAdd"
       >添加</el-button>
       <el-button
+        v-if="syncInstitutionButton"
         v-waves
         plain
         class="filter-item"
@@ -116,13 +118,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="300" fixed="right">
         <template slot-scope="{row}">
-          <el-button type="text" icon="el-icon-edit" :autofocus="true" @click="handleEdit(row)">
+          <el-button v-if="updateInstitutionButton" type="text" icon="el-icon-edit" :autofocus="true" @click="handleEdit(row)">
             编辑
           </el-button>
-          <el-button type="text" icon="el-icon-delete" style="color: #f56c6c" :autofocus="true" @click="handleDelete(row)">
+          <el-button v-if="deleteInstitutionButton" type="text" icon="el-icon-delete" style="color: #f56c6c" :autofocus="true" @click="handleDelete(row)">
             删除
           </el-button>
-          <el-button type="text" icon="el-icon-switch-button" style="color: green" :autofocus="true" @click="handleStop(row)">
+          <el-button v-if="stopInstitutionButton" type="text" icon="el-icon-switch-button" style="color: green" :autofocus="true" @click="handleStop(row)">
             停用
           </el-button>
         </template>
@@ -147,6 +149,7 @@ import pagination from '@/components/Pagination'
 import waves from '@/directive/waves/waves' // 指令,在按钮上点击有水波效果
 import { parseTime } from '@/utils'
 import { listInstitution, deleteInstitution, stopInstitution, syncInstitution } from '@/api/institution'
+import store from '@/store'
 
 export default {
   components: {
@@ -178,7 +181,12 @@ export default {
       syncLoading: false, // 手动同步
       tableList: [], // 表单数据
       multipleSelection: [], // 被选中表单
-      total: 0 // 默认总条数
+      total: 0, // 默认总条数
+      updateInstitutionButton: store.getters.permissions.includes('institution:update'),
+      deleteInstitutionButton: store.getters.permissions.includes('institution:delete'),
+      stopInstitutionButton: store.getters.permissions.includes('institution:stop'),
+      syncInstitutionButton: store.getters.permissions.includes('institution:sync'),
+      addInstitutionButton: store.getters.permissions.includes('institution:add')
 
     }
   },

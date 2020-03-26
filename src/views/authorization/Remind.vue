@@ -34,7 +34,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="handleCancel">取 消</el-button>
-      <el-button v-loading="loading" type="primary" @click="handleAdd">确 定</el-button>
+      <el-button v-loading="loading" type="primary" @click="handleRemind">确 定</el-button>
     </div>
   </el-dialog>
 </template>
@@ -63,7 +63,7 @@ export default {
     handleCancel() {
       this.$emit('handleCancel')
     },
-    handleAdd() {
+    handleRemind() {
       this.$emit('handleCancel')
     },
     handleClose() {

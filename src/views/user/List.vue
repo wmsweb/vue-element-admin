@@ -70,6 +70,7 @@
       <el-table-column label="操作" align="center" fixed="right">
         <template slot-scope="{row}">
           <el-button
+            v-if="updateUserButton"
             size="mini"
             type="primary"
             icon="el-icon-edit"
@@ -77,6 +78,7 @@
             @click="handleUpdate(row)"
           >编辑</el-button>
           <el-button
+            v-if="deleteUserButton"
             style="margin-left: 30px;"
             size="mini"
             icon="el-icon-delete"
@@ -149,7 +151,9 @@ export default {
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
       updateUserForm: {},
-      addUserButton: store.getters.permissions.includes('user:add')
+      addUserButton: store.getters.permissions.includes('user:add'),
+      deleteUserButton: store.getters.permissions.includes('user:delete'),
+      updateUserButton: store.getters.permissions.includes('user:update')
 
     }
   },

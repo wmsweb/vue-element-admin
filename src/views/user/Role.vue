@@ -1,7 +1,13 @@
 <template>
   <div>
     <sticky :class-name="'sub-navbar'">
-      <el-button v-loading="loading" type="success" style="margin-left: 10px" @click="dialogFormVisible = true">
+      <el-button
+        v-if="addRoleButton"
+        v-loading="loading"
+        type="success"
+        style="margin-left: 10px"
+        @click="dialogFormVisible = true"
+      >
         添加新角色
       </el-button>
     </sticky>
@@ -16,7 +22,7 @@
         <el-table-column label="操作" width="260">
           <template slot-scope="scope">
             <el-button
-              v-if="scope.row.name !== 'admin' "
+              v-if="scope.row.name !== 'admin' && updateRoleButton"
               size="mini"
               type="primary"
               @click="handleEdit(scope.row)"
@@ -24,14 +30,21 @@
               编辑
             </el-button>
             <el-button
-              v-if="scope.row.name !== 'admin' "
+              v-if="scope.row.name !== 'admin' && deleteRoleButton"
               type="danger"
               size="mini"
               @click="handleDelete(scope.$index, scope.row)"
             >
               删除
             </el-button>
-            <el-button size="mini" type="success" @click="handleRolePermission(scope.row)">设置权限</el-button>
+            <el-button
+              v-if="addRolePermissionButton"
+              size="mini"
+              type="success"
+              @click="handleRolePermission(scope.row)"
+            >
+              设置权限
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -40,7 +53,7 @@
     <addRole :dialog-form-visible="dialogFormVisible" @handleAddRole="handleAddRole" @handleCancel="handleCancel" />
     <editRole
       :dialog-edit-form-visible="dialogEditFormVisible"
-      :editRoleForm="editRoleForm"
+      :edit-role-form="editRoleForm"
       @handleEditRole="handleEditRole"
       @handleCancel="handleCancel"
     />
@@ -60,6 +73,7 @@ import AddRole from '@/views/user/AddRole'
 import EditRole from '@/views/user/EditRole'
 import RolePermission from '@/views/user/RolePermission'
 import { getRoles, deleteRole } from '@/api/role'
+import store from '@/store'
 
 export default {
 
@@ -79,7 +93,11 @@ export default {
       checkedKeys: [],
       roleId: 0,
       dialogEditFormVisible: false,
-      editRoleForm: {}
+      editRoleForm: {},
+      addRoleButton: store.getters.permissions.includes('role:add'),
+      updateRoleButton: store.getters.permissions.includes('role:update'),
+      deleteRoleButton: store.getters.permissions.includes('role:delete'),
+      addRolePermissionButton: store.getters.permissions.includes('permission:addRolePermiss')
     }
   },
   mounted() {

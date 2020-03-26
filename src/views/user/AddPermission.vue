@@ -72,9 +72,11 @@ export default {
     //   this.permissionForm.pid = this.pid
     // },
     handleCancel() {
+      this.permissionForm = {}
       this.$emit('handleCancel')
     },
     handleClose() {
+      this.permissionForm = {}
       this.$emit('handleCancel')
     },
     handleAdd() {

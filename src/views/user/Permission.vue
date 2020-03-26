@@ -1,7 +1,14 @@
 <template>
   <div>
     <sticky :class-name="'sub-navbar'">
-      <el-button v-loading="loading" type="success" style="margin-left: 10px" @click="submit">添加根权限菜单</el-button>
+      <el-button
+        v-if="addPermissionButton"
+        v-loading="loading"
+        type="success"
+        style="margin-left: 10px"
+        @click="submit"
+      >添加根权限菜单
+      </el-button>
     </sticky>
 
     <aside>
@@ -25,13 +32,13 @@
           <span slot-scope="{ node, data }" class="custom-tree-node">
             <span>{{ node.label }}</span>
             <span>
-              <el-button type="text" size="mini" @click="() => append(data)">
+              <el-button v-if="addPermissionButton" type="text" size="mini" @click="() => append(data)">
                 添加
               </el-button>
-              <el-button type="text" size="mini" @click="() => edit(node, data)">
+              <el-button v-if="updatePermissionButton" type="text" size="mini" @click="() => edit(node, data)">
                 编辑
               </el-button>
-              <el-button type="text" size="mini" @click="() => remove(node, data)">
+              <el-button v-if="deletePermissionButton" type="text" size="mini" @click="() => remove(node, data)">
                 删除
               </el-button>
             </span>
@@ -59,6 +66,7 @@ import { permissionTree, deletePermission } from '@/api/permission'
 import Sticky from '@/components/Sticky/index'
 import AddPermission from '@/views/user/AddPermission'
 import EditPermission from '@/views/user/EditPermission'
+import store from '@/store'
 
 export default {
 
@@ -79,7 +87,10 @@ export default {
       },
       pid: 0,
       dialogEditFormVisible: false,
-      permissionEditForm: {}
+      permissionEditForm: {},
+      addPermissionButton: store.getters.permissions.includes('permission:add'),
+      updatePermissionButton: store.getters.permissions.includes('permission:update'),
+      deletePermissionButton: store.getters.permissions.includes('permission:delete')
 
     }
   },
