@@ -93,30 +93,30 @@
       style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column label="ID" prop="id" align="center" width="100" />
-      <el-table-column label="机构名称" prop="name" align="center" width="150">
+      <el-table-column type="selection" />
+      <el-table-column label="ID" prop="id" align="center" />
+      <el-table-column label="机构名称" prop="name" align="center">
         <template slot-scope="{row:{name}}"><span>{{ name }}</span></template>
       </el-table-column>
-      <el-table-column label="业务类别" prop="category" align="center" width="150">
+      <el-table-column label="业务类别" prop="category" align="center">
         <template slot-scope="{row:{category}}"><span>{{ category }}</span></template>
       </el-table-column>
-      <el-table-column label="机构状态" prop="state" align="center" width="150">
+      <el-table-column label="机构状态" prop="state" align="center" >
         <template slot-scope="{row:{state}}"><span>{{ state | stateFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="操作人" prop="updateName" align="center" width="150">
+      <el-table-column label="操作人" prop="updateName" align="center" >
         <template slot-scope="{row:{updateName}}"><span>{{ updateName }}</span></template>
       </el-table-column>
-      <el-table-column label="操作时间" prop="updateTime" width="200" align="center">
+      <el-table-column label="操作时间" prop="updateTime" align="center">
         <template slot-scope="{row:{updateTime}}"><span>{{ updateTime | timeFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="同步状态" prop="syncState" width="200" align="center">
+      <el-table-column label="同步状态" prop="syncState" align="center">
         <template slot-scope="{row:{syncState}}"><span>{{ syncState | syncStateFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="同步时间" prop="syncTime" width="200" align="center">
+      <el-table-column label="同步时间" prop="syncTime"  align="center">
         <template slot-scope="{row:{syncTime}}"><span>{{ syncTime | timeFilter }}</span></template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="300" fixed="right">
+      <el-table-column label="操作" align="center" fixed="right">
         <template slot-scope="{row}">
           <el-button v-if="updateInstitutionButton" type="text" icon="el-icon-edit" :autofocus="true" @click="handleEdit(row)">
             编辑
