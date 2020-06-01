@@ -60,6 +60,7 @@
         @click="handleSync"
       >手动同步</el-button>
       <el-button
+        v-if="addAuthorizationButton"
         v-waves
         class="filter-item"
         type="success"
@@ -81,7 +82,9 @@
     >
       <el-table-column label="ID" prop="id" align="center" />
       <el-table-column label="机构名称" align="center">
-        <template slot-scope="{row:{name}}"><span>{{ name }}</span></template>
+        <template slot-scope="{row:{name}}">
+          <span>{{ name }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="机构状态" align="center">
         <template slot-scope="{row:{state}}"><span>{{ state | stateFilter }}</span></template>
@@ -109,8 +112,12 @@
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right" width="200">
         <template slot-scope="{row}">
-          <el-button type="text" icon="el-icon-setting" @click="setReminder(row)">设置提醒</el-button>
-          <el-button type="text" icon="el-icon-more-outline" @click="viewDetail(row)">查看明细</el-button>
+          <el-button v-if="remindAuthorizationButton" type="text" icon="el-icon-setting" @click="setReminder(row)">
+            设置提醒
+          </el-button>
+          <el-button v-if="ordersAuthorizationButton" type="text" icon="el-icon-more-outline" @click="viewDetail(row)">
+            查看明细
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -125,7 +132,6 @@
     />
     <!-- 添加授权 -->
     <add
-      v-if="addAuthorizationButton"
       :dialog-form-visible="dialogFormVisible"
       @handleCancel="handleCancel"
       @handleAdd="handleAdd"
@@ -134,7 +140,6 @@
 
     <!-- 添加提醒 -->
     <remind
-      v-if="remindAuthorizationButton"
       :dialog-remind-visible="dialogRemindVisible"
       :remind-institution-name="remindInstitutionName"
       @handleCancel="handleCancel"
@@ -143,7 +148,6 @@
 
     <!-- 授权明细 -->
     <Details
-      v-if="ordersAuthorizationButton"
       :dialog-detail-visible="dialogDetailVisible"
       :detail-data="detailData"
       @handleCancel="handleCancel"
